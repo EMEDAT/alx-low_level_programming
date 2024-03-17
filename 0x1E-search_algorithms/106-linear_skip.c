@@ -1,51 +1,53 @@
 #include "search_algos.h"
+
 /**
- * linear_skip - function that searches for a value in a sorted
- * skip list of integers.
+ * linear_skip - searches for a value in a sorted skip list of integers
  *
- * @list: pointer to the head of the skip list to search in
- * @value: value to search for
+ * @list: a pointer to the head of the list to search in
+ * @value: the value to search for
  *
- * Return: return a pointer on the first node where value is located
- * If value is not present in list or if head is NULL return NULL
+ * Return: a pointer to the first node where value is located or NULL
  */
+
 skiplist_t *linear_skip(skiplist_t *list, int value)
 {
-	skiplist_t *h = list;
+	skiplist_t *cur, *prev;
 
-	if (list == NULL)
+	if (!list)
 		return (NULL);
 
-	/* Only one Element */
-	if (!h->next && h->n != value)
-		return (NULL);
-
-	/* Skip search */
-	while (h->n < value && h->next)
+	cur = list;
+	while (cur->next && cur->n < value)
 	{
-		list = h;
-		if (h->express)
-			h = h->express;
+		prev = cur;
+		if (cur->express)
+			cur = cur->express;
 		else
 		{
-			while (h->next)
-				h = h->next;
-			break;
+			while (cur->next)
+				cur = cur->next;
 		}
-		printf("Value checked at index [%ld] = [%d]\n", h->index, h->n);
+		if (cur->next)
+			printf("Value checked at index [%lu] = [%i]\n", cur->index, cur->n);
 	}
-	printf("Value found between indexes [%ld] and [%ld]\n",
-			list->index, h->index);
 
-	/* Linear search */
-	while (list->n <= value && list->index <= h->index)
+	printf("Value found between indexes [%lu] and [%lu]\n", prev->index,
+	       cur->index);
+
+	cur = prev;
+	while (cur && cur->n < value)
 	{
-		printf("Value checked at index [%ld] = [%d]\n", list->index, list->n);
-		if (list->n == value)
-			return (list);
-		if (list->next == NULL)
+		printf("Value checked at index [%lu] = [%i]\n", cur->index, cur->n);
+		if (cur->next)
+			cur = cur->next;
+		else
 			return (NULL);
-		list = list->next;
+	}
+
+	if (cur && cur->n == value)
+	{
+		printf("Value checked at index [%lu] = [%i]\n", cur->index, cur->n);
+		return (cur);
 	}
 
 	return (NULL);

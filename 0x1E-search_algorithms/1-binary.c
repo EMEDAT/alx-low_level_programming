@@ -1,47 +1,56 @@
 #include "search_algos.h"
 
 /**
- * binary_search - function that searches for a value in a sorted
- * array of integers using the Binary search algorithm
+ * print_array - prints the array of ints, separated with commas
  *
- * @array: Array is a pointer to the first element of the array to search in
- * @size: Number of elements in array
- * @value: Value to search for in the array
- *
- * Return: The first index where value is located
- * or -1 if value is not found or if array is NULL
+ * @array: a pointer to the array to print
+ * @first: the first index to print
+ * @last: the last index to print
  */
+
+void print_array(int *array, size_t first, size_t last)
+{
+	size_t i;
+
+	printf("Searching in array: ");
+	for (i = first; i <= last; i++)
+	{
+		if (i != first)
+			printf(", ");
+		printf("%d", array[i]);
+	}
+	printf("\n");
+}
+
+/**
+ * binary_search - searches for a value in an array of integers
+ *
+ * @array: a pointer to the first element of the array to search in
+ * @size: the number of elements in array
+ * @value: the value to search for
+ *
+ * Return: the index where value is located or -1 on failure or not found
+ */
+
 int binary_search(int *array, size_t size, int value)
 {
-	size_t left = 0;
-	size_t right = size - 1;
-	size_t middle = 0;
-	size_t i = 0;
+	size_t i = 0, first = 0, last = size - 1;
 
-	if (array != NULL)
+	if (array)
 	{
-		while (left <= right)
+		while (first <= last)
 		{
-			middle = (left + right) / 2;
-			printf("Searching in array: ");
-			for (i = left; i < right; i++)
-			{
-				printf("%d, ", array[i]);
-			}
-			printf("%d\n", array[i]);
-			if (array[middle] < value)
-			{
-				left = middle + 1;
-			}
-			else if (array[middle] > value)
-			{
-				right = middle - 1;
-			}
+			print_array(array, first, last);
+			i = (first + last) / 2; /* Gets the middle value */
+
+			if (value > array[i]) /* Uses the right part of array */
+				first = i + 1;
+			else if (value < array[i]) /* Uses the left part of array */
+				last = i - 1;
 			else
-			{
-				return (middle);
-			}
+				return (i);
 		}
 	}
+
 	return (-1);
 }
