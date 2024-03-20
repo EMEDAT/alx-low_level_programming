@@ -1,56 +1,59 @@
 #include "search_algos.h"
 
+
 /**
- * print_array - prints the array of ints, separated with commas
+ * printer_array - Function that print array in search
+ * @array: pointer to array to search
+ * @low: index to low the array
+ * @high: index to high the array
  *
- * @array: a pointer to the array to print
- * @first: the first index to print
- * @last: the last index to print
- */
+*/
 
-void print_array(int *array, size_t first, size_t last)
+void printer_array(int *array, size_t low, size_t high)
 {
-	size_t i;
-
 	printf("Searching in array: ");
-	for (i = first; i <= last; i++)
+	for (; low <= high; low++)
 	{
-		if (i != first)
+		printf("%d", array[low]);
+		if (low != high)
 			printf(", ");
-		printf("%d", array[i]);
 	}
-	printf("\n");
+	putchar('\n');
 }
 
 /**
- * binary_search - searches for a value in an array of integers
- *
- * @array: a pointer to the first element of the array to search in
- * @size: the number of elements in array
- * @value: the value to search for
- *
- * Return: the index where value is located or -1 on failure or not found
- */
+ * binary_search - Function that searches for a value in
+ * a sorted array of integers using Binary search algorithm
+ * @array: pointer to the first element of the array to search in
+ * @size: number of elements in array
+ * @value: value tu search for
+ * Return: return the first index where value is located
+ * if value is not present in array or if array is NULL
+ * The function return -1
+*/
 
 int binary_search(int *array, size_t size, int value)
 {
-	size_t i = 0, first = 0, last = size - 1;
+	size_t idx = 0, high = size - 1, low = 0;
 
-	if (array)
+	if (array != NULL && size > 0)
 	{
-		while (first <= last)
-		{
-			print_array(array, first, last);
-			i = (first + last) / 2; /* Gets the middle value */
 
-			if (value > array[i]) /* Uses the right part of array */
-				first = i + 1;
-			else if (value < array[i]) /* Uses the left part of array */
-				last = i - 1;
+		do {
+			printer_array(array, low, high);
+			idx = ((high - low) / 2) + low;
+
+			if (array[idx] == value)
+				return (value);
+
+			if (low == high)
+				break;
+
+			if (array[idx] < value)
+				low = idx + 1;
 			else
-				return (i);
-		}
+				high = idx - 1;
+		} while (array[idx] != value);
 	}
-
 	return (-1);
 }
